@@ -1,6 +1,16 @@
 package com.dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.bean.Employee;
 
@@ -26,5 +36,52 @@ public class EmployeeDao {
 	public int deleteEmployee(Employee e) {
 		String query = "delete from emp where id='" + e.getId() + "' ";
 		return jdbcTemplate.update(query);
+	}
+
+	public boolean saveEmployeeByPreparedStatement(final Employee e) {
+		String query = "insert into emp values (?,?,?)";
+		return jdbcTemplate.execute(query, new PreparedStatementCallback<Boolean>() {
+			@Override
+			public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				ps.setInt(1, e.getId());
+				ps.setString(2, e.getName());
+				ps.setFloat(3, e.getAge());
+
+				return ps.execute();
+			}
+		});
+	}
+
+	public List<Employee> getAllEmployees() {
+		return jdbcTemplate.query("select * from emp", new ResultSetExtractor<List<Employee>>() {
+			@Override
+			public List<Employee> extractData(ResultSet rs) throws SQLException, DataAccessException {
+
+				List<Employee> list = new ArrayList<Employee>();
+				while (rs.next()) {
+					Employee e = new Employee();
+					e.setId(rs.getInt(1));
+					e.setName(rs.getString(2));
+					e.setAge(rs.getInt(3));
+					list.add(e);
+				}
+				return list;
+			}
+		});
+	}
+	
+	public List<Employee> getAllEmployeesRowMapper(){
+		return jdbcTemplate.query("select * from emp", new RowMapper<Employee>() {
+			
+			@Override
+			public Employee mapRow(ResultSet rs, int rowNumber) throws SQLException{
+				Employee e = new Employee();
+				e.setId(rs.getInt(1));
+				e.setName(rs.getString(2));
+				e.setAge(rs.getInt(3));
+				
+				return e;
+			}
+		});
 	}
 }

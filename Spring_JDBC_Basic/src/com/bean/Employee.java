@@ -12,6 +12,9 @@ public class Employee {
 		this.age = age;
 	}
 
+	public Employee() {
+	}
+
 	/**
 	 * @return the id
 	 */
@@ -52,6 +55,11 @@ public class Employee {
 	 */
 	public void setAge(int age) {
 		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "id=" + id + ", name=" + name + ", age=" + age;
 	}
 
 }

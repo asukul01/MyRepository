@@ -13,14 +13,20 @@ public class Test {
 	      
 	    EmployeeDao dao=(EmployeeDao)ctx.getBean("edao");  
 		
-		  int status=dao.saveEmployee(new Employee(107,"Mike",26));
-		  System.out.println(status);
-		   
+		/*
+		 * boolean status=dao.saveEmployeeByPreparedStatement(new
+		 * Employee(123,"Eli",23)); System.out.println(status);
+		 */
+		  
+	    System.out.println("Using ResultSet Extractor ==>");
+		  dao.getAllEmployees().forEach(emp -> System.out.println(emp.toString())); 
 	    
 		/*
 		 * int status=dao.deleteEmployee(new Employee(1007,"Mike",24));
 		 * System.out.println(status);
 		 */
+		  System.out.println("Using RowMapper ==>");
+		  dao.getAllEmployeesRowMapper().forEach(emp -> System.out.println(emp.toString()));
 	}
 
 }
