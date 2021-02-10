@@ -4,26 +4,59 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import com.bean.Employee;
 
 public class EmployeeDao {
 	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	public EmployeeDao(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+	public EmployeeDao(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
 
 	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	public void setNamedParameterJdbcTemplate(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	}
+
 	public int saveEmployee(Employee e) {
 		String query = "insert into emp values('" + e.getId() + "','" + e.getName() + "','" + e.getAge() + "')";
 		return jdbcTemplate.update(query);
+	}
+
+	public void saveEmployeeByUsingNPJdbcT(Employee e) {
+		String query = "insert into emp values(:id,:name,:age)";
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", e.getId());
+		map.put("name", e.getName());
+		map.put("age", e.getAge());
+
+		namedParameterJdbcTemplate.execute(query, map, new PreparedStatementCallback<Integer>() {
+
+			@Override
+			public Integer doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+				return ps.executeUpdate();
+			}
+		});
 	}
 
 	public int updateEmployee(Employee e) {
@@ -69,19 +102,20 @@ public class EmployeeDao {
 			}
 		});
 	}
-	
-	public List<Employee> getAllEmployeesRowMapper(){
+
+	public List<Employee> getAllEmployeesRowMapper() {
 		return jdbcTemplate.query("select * from emp", new RowMapper<Employee>() {
-			
+
 			@Override
-			public Employee mapRow(ResultSet rs, int rowNumber) throws SQLException{
+			public Employee mapRow(ResultSet rs, int rowNumber) throws SQLException {
 				Employee e = new Employee();
 				e.setId(rs.getInt(1));
 				e.setName(rs.getString(2));
 				e.setAge(rs.getInt(3));
-				
+
 				return e;
 			}
 		});
 	}
+
 }
