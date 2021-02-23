@@ -1,7 +1,9 @@
 package com.demo.controller;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.springframework.stereotype.Controller;
@@ -26,7 +28,7 @@ public class HomeController {
 
 		String formattedDate = dateFormat.format(date);
 
-		model.addAttribute("serverTime", formattedDate);
+		model.addAttribute("serverTime ", formattedDate);
 
 		return "home";
 	}
@@ -35,6 +37,9 @@ public class HomeController {
 	public String user(@Validated User user, Model model) {
 		System.out.println("User Page Requested");
 		model.addAttribute("userName", user.getUserName());
+		
+		List<String> names= new ArrayList<String>();
+		model.addAttribute("names", names);
 		return "user";
 	}
 

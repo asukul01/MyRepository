@@ -17,7 +17,7 @@ public class Test {
 		boolean status = dao.saveEmployeeByPreparedStatement(new Employee(123, "Eli", 23));
 		System.out.println(status);
 		
-		empDao.saveEmployeeByUsingNPJdbcT(new Employee(124, "Micheal", 25));
+		empDao.saveEmployeeByUsingNPJdbcT(new Employee(127, "Micheal", 25));
 
 		System.out.println("Using ResultSet Extractor ==>");
 		dao.getAllEmployees().forEach(emp -> System.out.println(emp.toString()));

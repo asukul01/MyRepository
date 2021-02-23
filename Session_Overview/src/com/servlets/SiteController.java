@@ -92,7 +92,8 @@ public class SiteController extends HttpServlet {
 			 */
 
 			//response.sendRedirect("memberArea.jsp");
-			response.sendRedirect(request.getContextPath()+"/memberAreaController?action=memberArea");
+			String encode= response.encodeUrl(request.getContextPath());
+			response.sendRedirect(encode+"/memberAreaController?action=memberArea");
 		} else {
 			//response.sendRedirect("login.jsp");
 			response.sendRedirect(request.getContextPath()+"/SiteController?action=login");
