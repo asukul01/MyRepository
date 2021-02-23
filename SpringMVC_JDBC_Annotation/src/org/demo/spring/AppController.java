@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,15 +47,13 @@ public class AppController {
 				// System.out.println(users.toString());
 
 				context.close();
-				
+
 				System.out.println("forward");
 				return "forward:/";
 			} else {
 				System.out.println("adduser");
 				return "addUser";
 			}
-
 		}
-
 	}
 }
