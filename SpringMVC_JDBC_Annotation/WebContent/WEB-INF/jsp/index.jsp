@@ -14,6 +14,8 @@
 <body>
 	<h4>Home Page : List of users in the project</h4>
 	<hr />
+	<p/>
+	<a href="${pageContext.request.contextPath}/addUser"> Add User</a>
 	<table border="1" align="left">
 		<tr>
 			<th>User ID</th>

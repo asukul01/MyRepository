@@ -52,4 +52,32 @@ public class AppDAOImpl implements AppDAO {
 		return null;
 	}
 
+	public void addUser(User user) {
+		String query = "Insert into users " + "(USER_ID, USERNAME, email) values (?,?,?)";
+
+		Connection con = null;
+		try {
+			con = dataSource.getConnection();
+			PreparedStatement ps = con.prepareStatement(query);
+			ps.setString(1, "user_id.nextval");
+			ps.setString(2, user.getUserName());
+			ps.setString(3, user.getEmail());
+
+			con.close();
+			ps.close();
+
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			if (con != null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
 }

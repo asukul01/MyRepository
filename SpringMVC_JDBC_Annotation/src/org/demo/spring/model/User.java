@@ -5,6 +5,9 @@ public class User {
 	String userName;
 	String email;
 
+	public User() {
+	}
+
 	public User(int userId, String userName, String email) {
 		super();
 		this.userId = userId;
